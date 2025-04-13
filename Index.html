@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingle Meet Influencer Onboarding</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary-color: #6a11cb; /* Example primary color */
+            --secondary-color: #2575fc; /* Example secondary color */
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --gradient-animated: linear-gradient(135deg, #ff7e5f, #feb47b, #86a8e7, #7f7fd5, #ff7e5f); /* Repeat first color for smoother loop */
+            --background-color: #f4f7fc;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            --border-radius: 15px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --progress-bg: #e0e0e0;
+            --progress-fill: var(--primary-color);
+            --border-width: 3px; /* Thickness of the animated border */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+             scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 10px; /* Reduced padding for mobile */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .portal-container {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 900px;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+            animation-delay: 0.2s;
+        }
+
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        header {
+            background: var(--gradient);
+            color: white;
+            padding: 20px 30px; /* Adjusted padding */
+            text-align: center;
+            border-bottom: 5px solid var(--secondary-color);
+        }
+
+        header h1 {
+            margin-bottom: 5px; /* Reduced margin */
+            font-weight: 700;
+            font-size: 2em; /* Adjusted size */
+        }
+        header p {
+            font-size: 0.9em;
+            margin: 0;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            padding: 15px 20px; /* Adjusted padding */
+            background-color: #f9f9f9;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px; /* Slightly thinner */
+            background-color: var(--progress-bg);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--gradient);
+            border-radius: 4px;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75em; /* Adjusted size */
+            color: #777;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+        }
+        .progress-steps span {
+            text-align: center;
+            flex-basis: 25%; /* Roughly divide space */
+            padding: 2px 0;
+        }
+        .progress-steps span.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Tabs */
+        .tab-navigation {
+            display: flex;
+            background-color: #eee;
+            flex-wrap: wrap; /* Allow tabs to wrap */
+        }
+
+        .tab-button {
+            flex-grow: 1; /* Allow buttons to grow */
+            flex-basis: auto; /* Default basis */
+            min-width: 100px; /* Minimum width */
+            padding: 12px 15px; /* Adjusted padding */
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 0.9em; /* Adjusted size */
+            font-weight: 600;
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            text-align: center;
+            border-bottom: 3px solid transparent;
+            opacity: 0;
+            animation: slideInUp 0.5s ease-out forwards;
+        }
+
+        .tab-button:nth-child(1) { animation-delay: 0.3s; }
+        .tab-button:nth-child(2) { animation-delay: 0.4s; }
+        .tab-button:nth-child(3) { animation-delay: 0.5s; }
+        .tab-button:nth-child(4) { animation-delay: 0.6s; }
+
+
+        .tab-button.active {
+            background: var(--gradient);
+            color: white;
+            border-bottom-color: var(--primary-color);
+        }
+
+        .tab-button:disabled {
+            color: #aaa;
+            cursor: not-allowed;
+            background-color: #f0f0f0;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px; /* Adjusted padding */
+            animation: contentFadeIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+         @keyframes contentFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tab-content.active { display: block; opacity: 1; }
+
+        /* Animated Gradient Border Card */
+        .gradient-card-wrapper {
+            padding: var(--border-width); /* Padding creates space for the border */
+            border-radius: var(--border-radius);
+            margin-bottom: 25px;
+            position: relative;
+            background: var(--gradient-animated); /* Apply gradient to wrapper */
+            background-size: 200% 200%; /* Use larger size for smoother animation */
+            animation: gradient-border-animation 6s linear infinite;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            opacity: 0;
+            animation: slideInUp 0.6s ease-out forwards, gradient-border-animation 6s linear infinite 0.6s; /* Chain animations */
+        }
+
+        .gradient-card-content {
+            background: var(--card-bg); /* Inner content background */
+            padding: 25px;
+            border-radius: calc(var(--border-radius) - var(--border-width)); /* Slightly smaller radius */
+            position: relative; /* Ensure content is above wrapper */
+            z-index: 1;
+        }
+
+        @keyframes gradient-border-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+         @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Content Styling */
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px; /* Adjusted margin */
+            font-weight: 700;
+            font-size: 1.5em; /* Adjusted size */
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            margin-top: 20px; /* Adjusted margin */
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 1.2em; /* Adjusted size */
+        }
+
+        p, ul, ol {
+            margin-bottom: 15px;
+            font-size: 0.95em; /* Slightly smaller base font */
+        }
+
+        ul, ol {
+            padding-left: 25px;
+        }
+        ol ol, ul ul { margin-bottom: 5px; margin-top: 5px; } /* Reduce space in nested lists */
+
+
+        li { margin-bottom: 8px; }
+        strong { font-weight: 600; }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 15px; /* Reduced margin */
+            opacity: 0;
+            animation: slideInUp 0.5s ease-out forwards;
+        }
+         .form-group:nth-child(1) { animation-delay: 0.1s; }
+         .form-group:nth-child(2) { animation-delay: 0.2s; }
+         .form-group:nth-child(3) { animation-delay: 0.3s; }
+         /* ... add more delays ... */
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px; /* Reduced margin */
+            font-weight: 600;
+            color: var(--secondary-color);
+            font-size: 0.9em;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px; /* Adjusted padding */
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 0.95em; /* Adjusted size */
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(106, 17, 203, 0.3);
+            outline: none;
+        }
+
+        /* Table Optimization */
+        .table-container {
+            overflow-x: auto; /* Allow horizontal scroll on small screens */
+             margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 500px; /* Prevent excessive squishing */
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 10px; /* Adjusted padding */
+            text-align: left;
+            font-size: 0.9em;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: 600;
+            white-space: nowrap; /* Prevent headers from wrapping */
+        }
+
+        td input[type="text"] {
+           width: 100%; /* Fill cell */
+           border: none;
+           padding: 5px;
+           font-size: inherit; /* Inherit table font size */
+           background-color: transparent; /* Make it blend */
+        }
+        td input:focus {
+            outline: 1px solid var(--primary-color);
+            background-color: #fff; /* Show background on focus */
+        }
+
+        /* Signature Pad */
+        .signature-pad-container {
+            margin-top: 20px;
+            border: 1px dashed #ccc;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+             opacity: 0;
+             animation: slideInUp 0.5s ease-out forwards;
+             animation-delay: 0.5s;
+             max-width: 100%; /* Ensure it doesn't overflow */
+             overflow: hidden; /* Hide any overflow from canvas */
+        }
+         .signature-pad-container label {
+            font-size: 0.9em;
+             margin-bottom: 10px;
+             display: block;
+         }
+
+        #signature-pad {
+            border: 1px solid #eee;
+            background-color: #f9f9f9;
+            cursor: crosshair;
+            border-radius: 5px;
+            display: block;
+            margin: 0 auto 10px auto; /* Center and add bottom margin */
+            max-width: 100%; /* Make canvas responsive */
+            height: auto; /* Adjust height automatically */
+        }
+        .signature-buttons {
+            margin-top: 10px;
+        }
+
+        /* Buttons */
+        .button-container {
+            text-align: right;
+            margin-top: 25px; /* Adjusted margin */
+            display: flex; /* Use flexbox for better control on mobile */
+            justify-content: space-between; /* Space out Back/Next */
+            flex-wrap: wrap; /* Allow wrapping */
+        }
+
+        .btn {
+            padding: 10px 20px; /* Adjusted padding */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em; /* Adjusted size */
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.2s;
+            margin: 5px; /* Add margin for wrapped buttons */
+            flex-grow: 1; /* Allow buttons to grow */
+            flex-basis: 120px; /* Minimum width */
+             opacity: 0;
+             animation: slideInUp 0.5s ease-out forwards;
+             animation-delay: 0.7s;
+             text-align: center;
+        }
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+        }
+         .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
+         .btn-secondary { background-color: #ccc; color: #333; }
+         .btn-secondary:hover { background-color: #bbb; transform: translateY(-2px); }
+         .btn:disabled { background-color: #e0e0e0; cursor: not-allowed; transform: none; opacity: 0.7; }
+
+        /* Confirmation Screen */
+         #confirmation { text-align: center; }
+         #confirmation .icon {
+             font-size: 3.5em; /* Adjusted size */
+             color: #4CAF50;
+             margin-bottom: 15px;
+             animation: popIn 0.5s ease-out forwards;
+         }
+         @keyframes popIn {
+             0% { transform: scale(0.5); opacity: 0; }
+             80% { transform: scale(1.1); opacity: 1; }
+             100% { transform: scale(1); opacity: 1; }
+         }
+
+        /* Accordion for Details */
+        .accordion-section {
+             margin-top: 20px;
+             opacity: 0;
+             animation: slideInUp 0.6s ease-out forwards;
+             animation-delay: 0.8s; /* Delay after card */
+         }
+         .accordion-item {
+             border: 1px solid #e0e0e0;
+             border-radius: 8px;
+             margin-bottom: 10px;
+             overflow: hidden; /* Contain content */
+         }
+        .accordion-header {
+            background-color: #f9f9f9;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--secondary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        .accordion-header:hover {
+            background-color: #efefef;
+        }
+         .accordion-header::after {
+            content: '+'; /* Plus sign */
+            font-size: 1.4em;
+            color: var(--primary-color);
+            transition: transform 0.3s ease-out;
+         }
+         .accordion-header.active::after {
+             transform: rotate(45deg); /* Rotate to 'x' */
+         }
+
+        .accordion-content {
+            padding: 0 20px; /* Start with no padding vertically */
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+            background-color: #fff;
+             font-size: 0.9em; /* Slightly smaller for details */
+        }
+         .accordion-content.active {
+             padding: 15px 20px; /* Add padding when active */
+             max-height: 2000px; /* Allow ample space, adjust if needed */
+         }
+         .accordion-content ul, .accordion-content ol { padding-left: 20px; } /* Adjust list padding */
+         .accordion-content h4 {
+            font-size: 1.1em;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+            font-weight: 600;
+         }
+         .accordion-content h4:first-child { margin-top: 0; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .portal-container { margin: 5px; max-width: 100%; border-radius: 10px; }
+            header h1 { font-size: 1.8em; }
+            .gradient-card-content { padding: 15px; }
+            .button-container { justify-content: center; } /* Center buttons when wrapped */
+            .btn { flex-basis: 45%; } /* Allow two buttons per row */
+            .progress-steps span { flex-basis: 48%; font-size: 0.7em; } /* Fit 2 steps per row */
+            .table-container { margin-left: -20px; margin-right: -20px; } /* Allow table scroll touch edge */
+            table { min-width: 450px; }
+            th, td { font-size: 0.85em; padding: 6px 8px; }
+        }
+
+         @media (max-width: 480px) {
+             body { padding: 5px; }
+             header { padding: 15px 20px; }
+             header h1 { font-size: 1.6em; }
+             .tab-content { padding: 15px; }
+             .tab-button { font-size: 0.85em; padding: 10px 12px; min-width: 80px;}
+             h2 { font-size: 1.3em; }
+             h3 { font-size: 1.1em; }
+             .btn { font-size: 0.9em; padding: 10px 15px; flex-basis: 100%; margin: 8px 0;} /* Stack buttons fully */
+             .button-container { margin-top: 20px; }
+             .progress-steps { font-size: 0.65em; }
+             .signature-pad-container { padding: 10px; }
+             #signature-pad { height: 150px; /* Adjust height for mobile */ }
+             .accordion-header { padding: 12px 15px; font-size: 0.95em; }
+             .accordion-content { padding: 0 15px; font-size: 0.85em; }
+             .accordion-content.active { padding: 10px 15px; }
+             th, td { font-size: 0.8em; }
+             table { min-width: 400px; }
+         }
+
+    </style>
+</head>
+<body>
+
+    <div class="portal-container">
+        <header>
+            <h1>Ingle Meet</h1>
+            <p>Influencer Onboarding Portal</p>
+        </header>
+
+        <div class="progress-container">
+             <div class="progress-steps">
+                <span id="step-1" class="active">1. Welcome</span>
+                <span id="step-2">2. Details</span>
+                <span id="step-3">3. Agreement</span>
+                <span id="step-4">4. Submit</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-bar-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="tab-navigation">
+            <button class="tab-button active" onclick="openTab(event, 'instructions')" id="btn-instructions">Instructions</button>
+            <button class="tab-button" onclick="openTab(event, 'form')" id="btn-form" disabled>Your Details</button>
+            <button class="tab-button" onclick="openTab(event, 'agreement')" id="btn-agreement" disabled>Agreement</button>
+            <button class="tab-button" onclick="openTab(event, 'confirmation')" id="btn-confirmation" style="display: none;">Confirmation</button>
+        </div>
+
+        <form id="influencer-form" onsubmit="submitForm(event)">
+
+            <div id="instructions" class="tab-content active">
+                <div class="gradient-card-wrapper" style="animation-delay: 0.2s;">
+                    <div class="gradient-card-content">
+                        <h2>Welcome to the Ingle Meet Influencer Program!</h2>
+                        <p>We're thrilled to potentially partner with you! Ingle Meet is dedicated to transforming every event into an opportunity for love, friendship, or professional connection. Our partnership is designed to be mutually beneficial – you promote a unique app, and you earn when your audience engages with Ingle-powered events.</p>
+                         <p>Ingle Meet is the ultimate mobile app for connecting people at events, business premises, or even airports. Whether seeking romance, networking, or new friends, our intuitive features facilitate meaningful connections effortlessly.</p>
+                    </div>
+                </div>
+
+                 <div class="accordion-section">
+                     <h3>Learn More About Ingle Meet</h3>
+
+                     <div class="accordion-item">
+                         <div class="accordion-header" onclick="toggleAccordion(this)">Why Join Ingle Meet?</div>
+                         <div class="accordion-content">
+                             <p>Ingle Meet bridges the gap between digital and in-person interactions, offering tools for both social and professional connections. Whether you’re at a wedding, gym, nightclub, airport, or corporate conference, Ingle Meet ensures you never miss a chance to connect.</p>
+                             <ul>
+                                <li><strong>Find Love:</strong> Use our advanced matching algorithm to meet your perfect partner in real-time.</li>
+                                <li><strong>Professional Networking:</strong> Build lasting professional relationships at events or workplaces.</li>
+                                <li><strong>Event Engagement:</strong> Maximize your connections at conferences, festivals, and gatherings.</li>
+                                <li><strong>Travel Companions:</strong> Turn layovers or flights into memorable experiences with fellow passengers.</li>
+                                <li><strong>Monetization Opportunities:</strong> Earn money by creating premium networking hubs for events or venues.</li>
+                             </ul>
+                         </div>
+                     </div>
+
+                     <div class="accordion-item">
+                         <div class="accordion-header" onclick="toggleAccordion(this)">Earn Money with Ingle Meet</div>
+                         <div class="accordion-content">
+                             <p>Ingle is not just about making connections—it’s also a platform for monetization. Event organizers, businesses, and individuals can leverage Ingle Meet to generate additional income.</p>
+                             <ul>
+                                <li><strong>Event Organizers:</strong> Enhance your events by offering premium networking features and charge for exclusive access.</li>
+                                <li><strong>Businesses:</strong> Use Ingle Meet to engage customers, build vibrant communities, and increase customer loyalty.</li>
+                                <li><strong>Individuals:</strong> Monetize meetups, paid networking groups, or exclusive communities effortlessly.</li>
+                             </ul>
+                         </div>
+                     </div>
+
+                      <div class="accordion-item">
+                         <div class="accordion-header" onclick="toggleAccordion(this)">Use Case Scenarios</div>
+                         <div class="accordion-content">
+                              <ul>
+                                 <li><strong>Weddings:</strong> Guests use Ingle Meet to network, generating extra income for the couple.</li>
+                                 <li><strong>Conferences:</strong> Professionals connect in real time for better engagement and business opportunities.</li>
+                                 <li><strong>Nightclubs:</strong> Patrons mingle in private hubs, enhancing the nightlife experience.</li>
+                                 <li><strong>Airports:</strong> Travelers connect with others during layovers or flights for memorable journeys.</li>
+                                 <li><strong>Gyms:</strong> Members network with workout partners or instructors, fostering a fitness community.</li>
+                             </ul>
+                         </div>
+                     </div>
+
+                     <div class="accordion-item">
+                         <div class="accordion-header" onclick="toggleAccordion(this)">Comprehensive Features List</div>
+                         <div class="accordion-content">
+                              <ol>
+                                 <li><strong>Geo-Fencing:</strong> Ensures only users physically present at the event, business premises, or airport can join the hub.</li>
+                                 <li><strong>Name Morphing:</strong> Users can display nicknames for privacy, revealing their real names only when comfortable.</li>
+                                 <li><strong>Age Range Display:</strong> Shows age ranges instead of exact ages to protect user privacy.</li>
+                                 <li><strong>Access Code Security:</strong> Only those with the access code can join specific hubs, adding an extra layer of security.</li>
+                                 <li><strong>Boarding Pass Verification:</strong> Allows passengers to network by verifying boarding passes for airport and flight mingles.</li>
+                                 <li><strong>Adult-Only Access:</strong> Restricted to users 18+ to ensure a mature community.</li>
+                                 <li><strong>Anti-Doxing Protection:</strong> Proprietary watermarking to identify profile leaks and maintain privacy.</li>
+                                 <li><strong>Secure Chat:</strong> Enables safe, private conversations between users.</li>
+                                 <li><strong>Seamless Event Setup:</strong> Create an event hub in less than 2 minutes with QR codes or links.</li>
+                                 <li><strong>Robust Filters:</strong> Filter users by preferences like age, occupation, religion, or net worth.</li>
+                                 <li><strong>High-Value Connections:</strong> Net worth-based filtering helps high-value users connect.</li>
+                                 <li><strong>Secure Payment System:</strong> Uses Stripe for safe, reliable transactions.</li>
+                                 <li><strong>Incognito & Ghost Modes:</strong> Allows discreet Browse; ghost mode hides profiles entirely.</li>
+                                 <li><strong>QR Code/Link Access:</strong> Quick and easy access to events using shared QR codes or links.</li>
+                                 <li><strong>Private Events:</strong> Host exclusive, invite-only events that won’t appear on public listings.</li>
+                                 <li><strong>Event/User Reporting:</strong> Easily report inappropriate behavior or impersonated events for swift action.</li>
+                                 <li><strong>Fast Support:</strong> Get quick responses via the in-app support page.</li>
+                                 <li><strong>Advanced Matchmaking Algorithm:</strong> Matches users based on interests and preferences.</li>
+                                 <li><strong>Multi-Language Support:</strong> Supports major languages like English, Spanish, French, Arabic, and Russian.</li>
+                                 <li><strong>Phone Verification:</strong> Ensures users are real by verifying phone numbers during sign-up.</li>
+                                 <li><strong>Chats & Video Calls:</strong> Free communication through chat and video calls for event attendees.</li>
+                             </ol>
+                         </div>
+                     </div>
+
+                     <div class="accordion-item">
+                         <div class="accordion-header" onclick="toggleAccordion(this)">How Ingle Meet Ensures Security</div>
+                         <div class="accordion-content">
+                              <ul>
+                                 <li><strong>Verified Users:</strong> Phone and email verification for authenticity.</li>
+                                 <li><strong>Access Codes:</strong> Prevent unauthorized access to private hubs.</li>
+                                 <li><strong>Geo-Fencing:</strong> Only users within a location can join event hubs.</li>
+                                 <li><strong>Anti-Doxing Features:</strong> Protects user privacy with advanced watermarking.</li>
+                             </ul>
+                         </div>
+                     </div>
+
+                     <div class="accordion-item">
+                         <div class="accordion-header" onclick="toggleAccordion(this)">Step-by-Step Procedures</div>
+                         <div class="accordion-content">
+                             <h4>For Users:</h4>
+                             <ol>
+                                 <li><strong>Download & Sign Up:</strong>
+                                     <ul>
+                                         <li>Verify your phone number and email.</li>
+                                         <li>Upload a profile picture and at least two additional images (maximum of five).</li>
+                                         <li>Select interests and hobbies for better matchmaking.</li>
+                                     </ul>
+                                 </li>
+                                 <li><strong>Complete Your Profile:</strong>
+                                     <ul>
+                                         <li>Add optional details like religion, net worth, education, and preferences to enhance matching accuracy.</li>
+                                     </ul>
+                                 </li>
+                                 <li><strong>Join Events:</strong>
+                                     <ul>
+                                         <li>Navigate to the “Join Events” page to find and join public or private events.</li>
+                                         <li>Use QR codes or links to access private hubs.</li>
+                                     </ul>
+                                 </li>
+                             </ol>
+                             <h4>For Event Organizers:</h4>
+                              <ol>
+                                 <li><strong>Create Events:</strong>
+                                      <ul>
+                                         <li>Go to the “My Events” tab and select “Create Event.”</li>
+                                         <li>Fill in event details, upload images, and select the location, date, and time.</li>
+                                         <li>Choose whether the event is public or private.</li>
+                                     </ul>
+                                 </li>
+                                 <li><strong>Set Privacy Levels:</strong>
+                                      <ul>
+                                         <li>For public events, attendees can find them in the “Join Events” tab.</li>
+                                         <li>For private events, only invited users with the link or QR code can join.</li>
+                                     </ul>
+                                 </li>
+                                 <li><strong>Share Access Codes:</strong>
+                                     <ul>
+                                         <li>Distribute access codes manually for added security.</li>
+                                         <li>Ensure attendees are within the venue perimeter for entry.</li>
+                                     </ul>
+                                 </li>
+                             </ol>
+                             <h4>For Businesses:</h4>
+                              <ol>
+                                 <li><strong>Create Business Hubs:</strong>
+                                     <ul>
+                                         <li>Select “Business/Workplace” during event creation.</li>
+                                         <li>Add details, upload images, and input payout information.</li>
+                                     </ul>
+                                 </li>
+                                 <li><strong>Renew Weekly:</strong>
+                                     <ul>
+                                         <li>Business hubs expire every 7 days to maintain current user engagement.</li>
+                                     </ul>
+                                 </li>
+                                 <li><strong>Share QR Codes:</strong>
+                                     <ul>
+                                         <li>Provide access codes and QR codes to customers for secure networking.</li>
+                                     </ul>
+                                 </li>
+                             </ol>
+                             <h4>For Travelers:</h4>
+                              <ol>
+                                 <li><strong>Access Flight Mingle:</strong>
+                                     <ul>
+                                         <li>Tap “Flight Mingle” on the home page and add flight details manually or by scanning a boarding pass.</li>
+                                     </ul>
+                                 </li>
+                                 <li><strong>Network at the Airport:</strong>
+                                     <ul>
+                                         <li>Join the hub to connect with passengers, crew, or pilots.</li>
+                                     </ul>
+                                 </li>
+                             </ol>
+                         </div>
+                     </div>
+                 </div>
+
+
+                 <div class="gradient-card-wrapper" style="animation-delay: 0.6s;">
+                     <div class="gradient-card-content">
+                         <h3>Campaign Guidelines</h3>
+                         <p>We want your promotion to be authentic, bold, and exciting.</p>
+                         <p><strong>Requirements:</strong></p>
+                         <ul>
+                            <li>Tag <strong>@inglemeet</strong> on relevant platforms.</li>
+                            <li>Use hashtags like #IngleMeet, #MeetOnIngle, #Ingle, #Single, #Mingle, #Meet, #Networking, #Love.</li>
+                            <li>Clearly mention what the app does, using hooks like:
+                                <ul>
+                                    <li>"Turn your event into a dating app. And get paid."</li>
+                                    <li>"Earn money when guests connect at your party."</li>
+                                    <li>"This app shows you who's in first class and single."</li>
+                                    <li>"Event-based networking that pays YOU when guests connect."</li>
+                                </ul>
+                            </li>
+                         </ul>
+                         <p><strong>Content Do's:</strong></p>
+                         <ul>
+                            <li>Be authentic; share as a personal discovery.</li>
+                            <li>Film at events, airports, or even mock usage scenarios.</li>
+                            <li>Emphasize money-making potential for various venues.</li>
+                            <li>Emphasize connecting for love, business, friendship etc. at different locations.</li>
+                            <li>Include clear calls-to-action like "Download Ingle Meet now".</li>
+                        </ul>
+                         <p><strong>Content Don'ts:</strong></p>
+                         <ul>
+                            <li>Don't fake app functionality or make misleading claims.</li>
+                            <li>Adhere to platform guidelines and local laws.</li>
+                         </ul>
+                     </div>
+                 </div>
+
+                <div class="button-container">
+                    <div></div> <button type="button" class="btn btn-primary" onclick="nextTab('instructions', 'form')">Next: Enter Your Details</button>
+                </div>
+            </div>
+
+            <div id="form" class="tab-content">
+                 <div class="gradient-card-wrapper">
+                     <div class="gradient-card-content">
+                        <h2>Your Details</h2>
+                        <p>Please provide your information so we can set up our partnership.</p>
+
+                        <div class="form-group">
+                            <label for="full-name">Full Name *</label>
+                            <input type="text" id="full-name" name="full_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number (Optional)</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Country *</label>
+                            <input type="text" id="country" name="country" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="city">City *</label>
+                            <input type="text" id="city" name="city" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="niche">Primary Niche(s) *</label>
+                            <input type="text" id="niche" name="niche" required placeholder="e.g., Lifestyle, Travel, Tech, Events">
+                        </div>
+                     </div>
+                 </div>
+
+                 <div class="gradient-card-wrapper">
+                      <div class="gradient-card-content">
+                        <h3>Social Media Presence</h3>
+                        <p>Enter your main platforms and estimated audience size. Provide at least one handle/link.</p>
+                         <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>S/N</th>
+                                        <th>Platform</th>
+                                        <th>Audience Size</th>
+                                        <th>Link / Handle *</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>1</td><td>Instagram</td><td><input type="text" name="audience_instagram" placeholder="e.g., 10k"></td><td><input type="text" name="handle_instagram" placeholder="@handle or link"></td></tr>
+                                    <tr><td>2</td><td>Tik Tok</td><td><input type="text" name="audience_tiktok" placeholder="e.g., 50k"></td><td><input type="text" name="handle_tiktok" placeholder="@handle or link"></td></tr>
+                                    <tr><td>3</td><td>YouTube</td><td><input type="text" name="audience_youtube" placeholder="e.g., 5k"></td><td><input type="text" name="handle_youtube" placeholder="Channel link"></td></tr>
+                                    <tr><td>4</td><td>Twitter</td><td><input type="text" name="audience_twitter" placeholder="e.g., 15k"></td><td><input type="text" name="handle_twitter" placeholder="@handle or link"></td></tr>
+                                    <tr><td>5</td><td>Facebook</td><td><input type="text" name="audience_facebook" placeholder="e.g., 2k"></td><td><input type="text" name="handle_facebook" placeholder="Page link"></td></tr>
+                                    <tr><td>6</td><td>LinkedIn</td><td><input type="text" name="audience_linkedin" placeholder="e.g., 1k"></td><td><input type="text" name="handle_linkedin" placeholder="Profile link"></td></tr>
+                                </tbody>
+                            </table>
+                         </div>
+                         <small id="social-error-message" style="color:red; display: none;">Please provide at least one platform handle/link.</small>
+                      </div>
+                 </div>
+
+                <div class="gradient-card-wrapper">
+                    <div class="gradient-card-content">
+                        <h3>Payment Information</h3>
+                         <div class="form-group">
+                            <label for="payment-method">Preferred Payment Method *</label>
+                            <select id="payment-method" name="payment_method" required onchange="togglePaymentFields()">
+                                <option value="">-- Select Method --</option>
+                                <option value="paypal">PayPal</option>
+                                <option value="bank">Bank Transfer</option>
+                                <option value="crypto">Crypto</option>
+                            </select>
+                        </div>
+                        <div id="paypal-fields" class="payment-details" style="display: none;">
+                            <div class="form-group"><label for="paypal-email">PayPal Email *</label><input type="email" id="paypal-email" name="paypal_email"></div>
+                        </div>
+                        <div id="bank-fields" class="payment-details" style="display: none;">
+                            <div class="form-group"><label for="bank-name">Bank Name *</label><input type="text" id="bank-name" name="bank_name"></div>
+                            <div class="form-group"><label for="bank-account-name">Bank Account Name *</label><input type="text" id="bank-account-name" name="bank_account_name"></div>
+                            <div class="form-group"><label for="bank-account-number">Bank Account Number *</label><input type="text" id="bank-account-number" name="bank_account_number"></div>
+                            <div class="form-group"><label for="bank-swift">Bank Swift/BIC/Routing Code *</label><input type="text" id="bank-swift" name="bank_swift"></div>
+                            <div class="form-group"><label for="bank-address">Bank Address *</label><input type="text" id="bank-address" name="bank_address"></div>
+                        </div>
+                         <div id="crypto-fields" class="payment-details" style="display: none;">
+                             <div class="form-group"><label for="crypto-notes">Crypto Wallet Address & Type *</label><textarea id="crypto-notes" name="crypto_notes" rows="3" placeholder="e.g., BTC: 1A1zP1... \nETH: 0xde0b..."></textarea></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button type="button" class="btn btn-secondary" onclick="prevTab('form', 'instructions')">Back</button>
+                    <button type="button" class="btn btn-primary" onclick="validateAndNextTab('form', 'agreement')">Next: Review Agreement</button>
+                </div>
+            </div>
+
+            <div id="agreement" class="tab-content">
+                <div class="gradient-card-wrapper">
+                    <div class="gradient-card-content">
+                        <h2>Partnership Agreement</h2>
+                        <p>Please review the terms of our partnership carefully. This Agreement is between Ingle Meet ("Company") and you, the Influencer.</p>
+                        <h3>1. Purpose</h3><p>You agree to promote Ingle Meet and its features to your audience, creating or sharing promotional content according to our guidelines.</p>
+                        <h3>2. Deliverables</h3><p>You agree to:</p><ul><li>Create or share pictures/videos promoting Ingle Meet.</li><li>Tag Ingle Meet and use the #IngleMeet hashtag.</li><li>Optionally promote upcoming Ingle-powered events in your city.</li></ul>
+                        <h3>3. Compensation</h3><p>Earnings are based on:</p><ul><li><strong>Promotion Commissions:</strong> 2% flat rate on all event creations in your state for 6 months (max $50,000).</li><li><strong>Partnership Influencing:</strong> 5% commission on all connections made via companies (hotels, venues, etc.) you help partner with Ingle Meet, for 6 months (max $50,000).</li><li><strong>Personal Event Hosting Bonus:</strong> Additional 5% on your initial commission for hosting your own Ingle Meet event.</li><li><strong>Optional Bonuses:</strong> Potential 0.5% extra for high-performing content or viral campaigns for events during that week.</li></ul><p><em>Note:</em> Compensation is tied to events hosted in your state/region. You can filter events by city within the Ingle Meet app to estimate potential earnings.</p>
+                        <h3>4. Content Rights</h3><p>You grant Ingle Meet permission to repost, share, or use submitted promotional content in our marketing efforts, with attribution to you.</p>
+                        <h3>5. Brand Guidelines</h3><ul><li>Content must not be offensive, discriminatory, or misleading.</li><li>Content must align with Ingle Meet's tone: bold, classy, clever, connection-driven.</li><li>You must strictly adhere to the rules and regulations of your country and the social media platforms used.</li><li>Ingle Meet reserves the final say on content alignment and commission eligibility.</li></ul>
+                        <h3>6. Term & Termination</h3><p>This agreement is valid for 6 months upon signing, unless terminated by either party with 7 days' written notice. Breaching terms may result in immediate termination and forfeiture of commissions.</p>
+                        <h3>7. Confidentiality</h3><p>Proprietary details like performance insights or specific rates must remain confidential.</p>
+                    </div>
+                 </div>
+
+                 <div class="gradient-card-wrapper signature-section">
+                     <div class="gradient-card-content">
+                        <h3>Agreement & Signature</h3>
+                         <p>By signing below, you confirm that you have read, understood, and agree to all the terms and conditions outlined in this Partnership Agreement.</p>
+                         <div class="form-group">
+                             <label for="agree-checkbox" style="display:inline-flex; align-items: center; font-weight: normal; color: var(--text-color);">
+                                 <input type="checkbox" id="agree-checkbox" name="agree_terms" required onchange="toggleSubmitButton()" style="width: auto; margin-right: 10px;"> I agree to the terms and conditions. *
+                             </label>
+                         </div>
+                         <div class="signature-pad-container">
+                             <label for="signature-pad">Draw Your Signature Below: *</label>
+                             <canvas id="signature-pad" width="400" height="150"></canvas> <div class="signature-buttons">
+                                  <button type="button" class="btn btn-secondary btn-sm" onclick="clearSignature()">Clear</button>
+                             </div>
+                             <input type="hidden" id="signature-data" name="signature_data">
+                              <small id="sig-error-message" style="color:red; display: none; margin-top: 5px;">Signature is required.</small>
+                         </div>
+                    </div>
+                 </div>
+
+                <div class="button-container">
+                    <button type="button" class="btn btn-secondary" onclick="prevTab('agreement', 'form')">Back</button>
+                    <button type="submit" class="btn btn-primary" id="submit-button" disabled>Agree & Submit Application</button>
+                </div>
+            </div>
+
+             <div id="confirmation" class="tab-content">
+                  <div class="icon">&#10004;</div>
+                  <h2>Submission Successful!</h2>
+                 <p>Thank you for submitting your application to the Ingle Meet Influencer Program.</p>
+                 <p>We have received your details and the signed agreement. Our team will review your application and get back to you soon regarding the next steps.</p>
+                 <p>We appreciate your interest in partnering with Ingle Meet!</p>
+                 <br>
+                 <p><strong>Follow us:</strong> @inglemeet</p>
+             </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <script>
+        let currentTab = 'instructions';
+        const totalSteps = 4;
+
+        // --- Signature Pad Setup ---
+        const canvas = document.getElementById('signature-pad');
+        const signaturePad = new SignaturePad(canvas, {
+            backgroundColor: 'rgb(249, 249, 249)',
+            penColor: 'rgb(0, 0, 0)'
+        });
+
+        function resizeCanvas() {
+            const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            // Get parent width *after* CSS has potentially shrunk it
+             const parentWidth = canvas.parentElement.offsetWidth - 30; // Subtract padding
+             canvas.width = Math.min(parentWidth, 400) * ratio; // Use parent width or max, apply ratio
+             canvas.style.width = `${Math.min(parentWidth, 400)}px`; // Set display width
+
+            // Adjust height proportionally or set fixed height
+             canvas.height = 150 * ratio; // Fixed height example, adjust as needed
+             canvas.style.height = `150px`;
+
+            canvas.getContext("2d").scale(ratio, ratio);
+            signaturePad.clear();
+         }
+        window.addEventListener("resize", resizeCanvas);
+        // Initial resize needs to happen slightly after DOM load for accurate parent width
+         document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(resizeCanvas, 100); // Delay resize slightly
+         });
+
+
+        // --- Accordion Logic ---
+         function toggleAccordion(headerElement) {
+            const content = headerElement.nextElementSibling;
+            headerElement.classList.toggle('active');
+            content.classList.toggle('active');
+        }
+
+        // --- Progress Bar & Tab Logic (Mostly Unchanged, minor adjustments) ---
+        function updateProgress(step) {
+            const fill = document.getElementById('progress-fill');
+            const percentage = step <= 1 ? 0 : ((step - 1) / (totalSteps - 1)) * 100;
+            fill.style.width = `${percentage}%`;
+
+            document.querySelectorAll('.progress-steps span').forEach((span, index) => {
+                if (index < step) {
+                    span.classList.add('active');
+                } else {
+                    span.classList.remove('active');
+                }
+            });
+            // Ensure final step text is active on confirmation
+            if(step === totalSteps) {
+                const finalStepEl = document.getElementById(`step-${totalSteps}`);
+                if(finalStepEl) finalStepEl.classList.add('active');
+            }
+        }
+
+        function openTab(evt, tabName) {
+             if (evt && evt.currentTarget.disabled) return;
+
+            document.querySelectorAll(".tab-content").forEach(tc => {
+                 tc.style.display = "none";
+                 tc.classList.remove('active');
+             });
+             document.querySelectorAll(".tab-button").forEach(tb => tb.classList.remove("active"));
+
+            const currentContent = document.getElementById(tabName);
+             if (currentContent) {
+                currentContent.style.display = "block";
+                // Timeout helps ensure display:block applies before animation class
+                 setTimeout(() => currentContent.classList.add('active'), 10);
+             }
+
+            const buttonId = `btn-${tabName}`;
+            const activeButton = document.getElementById(buttonId);
+            if(activeButton) activeButton.classList.add("active");
+
+
+            currentTab = tabName;
+            let stepNumber = 1;
+            if (tabName === 'form') stepNumber = 2;
+            else if (tabName === 'agreement') stepNumber = 3;
+            else if (tabName === 'confirmation') stepNumber = 4;
+            updateProgress(stepNumber);
+        }
+
+        function nextTab(fromTab, toTab) {
+             const nextButton = document.getElementById(`btn-${toTab}`);
+             if (nextButton) nextButton.disabled = false;
+            openTab(null, toTab);
+        }
+
+         function prevTab(fromTab, toTab) {
+            openTab(null, toTab);
+        }
+
+        // --- Form Validation & Payment Fields ---
+        function validateAndNextTab(fromTab, toTab) {
+            const formElement = document.getElementById('influencer-form');
+            let isValid = true;
+            const requiredInTab = document.querySelectorAll(`#${fromTab} [required]`);
+
+            // Reset previous errors
+             document.querySelectorAll(`#${fromTab} .error-indicator`).forEach(el => el.style.borderColor = '#ccc');
+             document.getElementById('social-error-message').style.display = 'none';
+
+             requiredInTab.forEach(input => {
+                 input.style.borderColor = '#ccc'; // Reset border
+                 let fieldValid = true;
+                 if ((input.type === 'checkbox' && !input.checked) ||
+                     (input.type !== 'checkbox' && !input.value.trim())) {
+                     fieldValid = false;
+                 } else if (input.type === 'email' && !/^\S+@\S+\.\S+$/.test(input.value)) {
+                    fieldValid = false;
+                 }
+
+                  if (!fieldValid) {
+                      isValid = false;
+                      input.style.borderColor = 'red';
+                      // For checkboxes, maybe highlight the label
+                      if (input.type === 'checkbox') {
+                          input.parentElement.style.color = 'red'; // Highlight label text
+                      }
+                  } else if (input.type === 'checkbox') {
+                      input.parentElement.style.color = ''; // Reset label color
+                  }
+             });
+
+             // Specific Payment Validation
+              const paymentMethod = document.getElementById('payment-method').value;
+              if (paymentMethod) { // Only validate if a method is chosen
+                  document.querySelectorAll(`#${paymentMethod}-fields [required]`).forEach(pInput => {
+                      pInput.style.borderColor = '#ccc';
+                      if (!pInput.value.trim()) {
+                          isValid = false;
+                          pInput.style.borderColor = 'red';
+                      }
+                  });
+              }
+
+
+             // Social Handle Validation (at least one filled)
+             const handleInputs = document.querySelectorAll('#form input[name^="handle_"]');
+             let oneHandleFilled = false;
+             handleInputs.forEach(handle => { if (handle.value.trim()) oneHandleFilled = true; });
+
+             if (!oneHandleFilled) {
+                 isValid = false;
+                 document.getElementById('social-error-message').style.display = 'block';
+                  // Optionally highlight the table or container
+                 document.querySelector('#form .table-container').style.border = '1px solid red';
+             } else {
+                 document.getElementById('social-error-message').style.display = 'none';
+                 document.querySelector('#form .table-container').style.border = '';
+             }
+
+
+             if (isValid) {
+                 nextTab(fromTab, toTab);
+             } else {
+                 alert('Please fill in all required (*) fields correctly.');
+             }
+        }
+
+        function togglePaymentFields() {
+            const method = document.getElementById('payment-method').value;
+            document.querySelectorAll('.payment-details').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.payment-details [required]').forEach(input => input.required = false); // Reset required
+
+            if (method) {
+                const fieldsDiv = document.getElementById(`${method}-fields`);
+                if(fieldsDiv) {
+                    fieldsDiv.style.display = 'block';
+                     // Set required attributes for the visible section
+                    fieldsDiv.querySelectorAll('input, textarea').forEach(input => {
+                         // Check if the element *should* be required (you might have optional fields within)
+                         // For this form, all fields within each payment type are marked required in the HTML
+                         if(input.hasAttribute('id')) { // Simple check if it's a main input
+                             input.required = true;
+                         }
+                    });
+                }
+            }
+        }
+
+         function toggleSubmitButton() {
+             const checkbox = document.getElementById('agree-checkbox');
+             const submitButton = document.getElementById('submit-button');
+             const signatureEmpty = signaturePad.isEmpty();
+             const sigError = document.getElementById('sig-error-message');
+
+             const canSubmit = checkbox.checked && !signatureEmpty;
+             submitButton.disabled = !canSubmit;
+
+              // Visual feedback for signature requirement
+             if (checkbox.checked && signatureEmpty) {
+                  canvas.style.borderColor = 'red';
+                  sigError.style.display = 'block';
+             } else {
+                  canvas.style.borderColor = '#eee';
+                  sigError.style.display = 'none';
+             }
+             // Visual feedback for checkbox requirement (less common to highlight after interaction, but possible)
+              if (!checkbox.checked) {
+                  checkbox.parentElement.style.color = 'red'; // Highlight label if unchecked
+              } else {
+                  checkbox.parentElement.style.color = ''; // Reset label color if checked
+              }
+
+        }
+
+         function clearSignature() {
+            signaturePad.clear();
+            toggleSubmitButton();
+         }
+  function nextTab(fromTab, toTab) {
+    const nextButton = document.getElementById(`btn-${toTab}`);
+    if (nextButton) nextButton.disabled = false;
+    openTab(null, toTab);
+  }
+
+  function prevTab(fromTab, toTab) {
+    openTab(null, toTab);
+  }
+        // --- Form Submission ---
+        async function submitForm(event) {
+            event.preventDefault();
+            const checkbox = document.getElementById('agree-checkbox');
+             const sigError = document.getElementById('sig-error-message');
+
+
+            if (!checkbox.checked) {
+                alert("Please agree to the terms and conditions.");
+                checkbox.parentElement.style.color = 'red';
+                return;
+            }
+             if (signaturePad.isEmpty()) {
+                alert("Please provide your signature.");
+                canvas.style.borderColor = 'red';
+                sigError.style.display = 'block';
+                return;
+            }
+
+            const signatureData = signaturePad.toDataURL();
+            document.getElementById('signature-data').value = signatureData;
+
+const formData = new FormData(event.target);
+  formData.set('signature_data', signaturePad.toDataURL());
+
+  // build a plain object
+  const payload = {};
+  formData.forEach((v,k) => payload[k] = v);
+
+  try {
+    const resp = await fetch('https://script.google.com/macros/s/AKfycbyOBSrFUyAD9naRtgbxLnMu3d9-bmzMA3-rZAli8Daxm8GLj6kJGBaKIG7FQeK80HsrGQ/exec', {
+      method: 'POST', 
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const result = await resp.json();
+    if (result.status === 'success') {
+      showConfirmation();
+    } else {
+      alert('Submission failed: ' + result.error);
+    }
+  } catch (e) {
+    console.error(e);
+    alert('Network error submitting form.');
+  }
+            // Mock Success:
+            showConfirmation();
+        }
+
+         function showConfirmation() {
+            document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
+            document.querySelectorAll('.tab-button').forEach(tb => tb.style.display = 'none'); // Hide all nav buttons
+
+            const confirmTab = document.getElementById('confirmation');
+            const confirmButton = document.getElementById('btn-confirmation'); // The hidden nav button
+
+            confirmTab.style.display = 'block';
+            confirmButton.style.display = 'block'; // Show confirmation button in nav
+            confirmButton.classList.add('active');
+            setTimeout(() => confirmTab.classList.add('active'), 10); // Trigger animation
+
+            updateProgress(totalSteps); // Mark final step
+         }
+
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            openTab(null, 'instructions');
+            updateProgress(1);
+            togglePaymentFields();
+             // Add listener to signature pad to check submit button state
+             signaturePad.addEventListener("endStroke", toggleSubmitButton);
+             // Initial check in case of browser auto-fill? (though signature won't be filled)
+             // toggleSubmitButton(); // Probably not needed here
+        });
+
+    </script>
+</body>
+</html>
